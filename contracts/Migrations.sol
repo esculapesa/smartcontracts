@@ -16,6 +16,8 @@ contract Migrations {
 
     function setCompleted(uint completed) public restricted {
         last_completed_migration = completed;
+        // Ensure the last_completed_migration was properly updated
+        assert(last_completed_migration == completed);
     }
 
     function upgrade(address new_address) public restricted {
