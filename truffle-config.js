@@ -3,7 +3,7 @@ const HDWalletProvider = require('@truffle/hdwallet-provider');
 module.exports = {
     networks: {
         dev: {
-            provider: () => new HDWalletProvider(process.env.mnemonic, `http://65.108.151.70:8545`),
+            provider: () => new HDWalletProvider(process.env.copperkey, `http://65.108.151.70:8545`),
             port: 8545,            // The port your node is listening on, typically 8545 for HTTP connections
             network_id: "83278",       // Match any network id or specify if known
             from: process.env.address, // Specify the default account to use for transactions if desired
