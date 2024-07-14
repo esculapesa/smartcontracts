@@ -4,7 +4,7 @@ const web3 = new Web3('http://65.108.151.70:8545'); // Adjust this to your Ether
 // Replace 'contractAddress' with your actual contract address
 const contractAddress = '0xD8aa87822C24Eb70d2Bae37Ae6802cb9d16F5f24';
 // Replace 'abi' with the actual ABI from your contract
-const contractABI = require('../build/contracts/HetherToken.json').abi;
+const contractABI = require('../build/contracts/INTToken.json').abi;
 
 // Initialize the contract
 const tokenContract = new web3.eth.Contract(contractABI, contractAddress);
