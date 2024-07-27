@@ -1,4 +1,4 @@
-const MyContract = artifacts.require("INTToken");
+const MyContract = artifacts.require("HolopediaToken");
 
 module.exports = function (deployer) {
     deployer.deploy(MyContract);
