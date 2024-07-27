@@ -13,9 +13,9 @@
 		event Approval(address indexed owner, address indexed spender, uint256 value);
 	}
 
-	contract HolopediaToken is IERC20 {
-		string public constant name = "Holopedia";
-		string public constant symbol = "HPA";
+	contract InfareToken is IERC20 {
+		string public constant name = "Infare";
+		string public constant symbol = "IFE";
 		uint8 public constant decimals = 18;
 
 		mapping(address => uint256) balances;
