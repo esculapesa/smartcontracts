@@ -2098,12 +2098,12 @@
     "83278": {
       "events": {},
       "links": {},
-      "address": "0x479b75D98A9062137EAD082E01bd762122666C81",
-      "transactionHash": "0x730e6f3bae3cb5db7a38521f6fd5d78d9b9b229cab952e682b04d9c389174163"
+      "address": "0x5DdEb8C0af8E63dd26E5B903ABF52341830096a0",
+      "transactionHash": "0x2238975104c4f9220853d48c11fbc67c9a7c5424d503a5f3cd55881fb82799d9"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-06-26T12:16:41.022Z",
+  "updatedAt": "2024-07-27T06:08:05.619Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
