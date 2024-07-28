@@ -1,4 +1,4 @@
-const MyContract = artifacts.require("InfareToken");
+const MyContract = artifacts.require("HolonToken");
 
 module.exports = function (deployer) {
     deployer.deploy(MyContract);
