@@ -1,4 +1,4 @@
-const MyContract = artifacts.require("EsaCoinToken");
+const MyContract = artifacts.require("HashedTimelock");
 
 module.exports = function (deployer) {
     deployer.deploy(MyContract);
