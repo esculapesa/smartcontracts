@@ -13,7 +13,7 @@ module.exports = {
     },
     compilers: {
         solc: {
-            version: "^0.5.0", // Or any other version that's appropriate
+            version: "^0.8.0", // Or any other version that's appropriate
             settings: {
                 optimizer: {
                     enabled: true,
