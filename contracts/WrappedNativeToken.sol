@@ -1,35 +1,59 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-
-contract WrappedNativeToken is ERC20 {
-    // Event when tokens are wrapped (deposited)
-    event Deposit(address indexed account, uint256 amount);
-
-    // Event when tokens are unwrapped (withdrawn)
-    event Withdrawal(address indexed account, uint256 amount);
-
-    // Constructor: Defines the wrapped token's name and symbol
-    constructor() ERC20("Wrapped ESA", "WESA") {}
-
-    // Fallback function to handle native token deposits directly (auto-wrap)
+ 
+contract WrappedNativeToken {
+    string public name = "Wrapped ESA";
+    string public symbol = "WESA";
+    uint8 public decimals = 18;
+    uint256 public totalSupply;
+    
+    mapping(address => uint256) private balances;
+    mapping(address => mapping(address => uint256)) private allowances;
+    
+ 
     receive() external payable {
-        deposit();  // Automatically calls the deposit function
+        deposit();
     }
-
-    // Function to wrap native tokens (deposit native tokens and mint WESA)
+ 
     function deposit() public payable {
-        require(msg.value > 0, "Must deposit some amount");  // Ensure a valid deposit amount
-        _mint(msg.sender, msg.value);  // Mints WESA equivalent to the native token deposited
-        emit Deposit(msg.sender, msg.value);  // Emit event for tracking
+        balances[msg.sender] += msg.value;
+        totalSupply += msg.value;
     }
-
-    // Function to unwrap wrapped tokens (burn WESA and send back native tokens)
+ 
     function withdraw(uint256 amount) public {
-        require(balanceOf(msg.sender) >= amount, "Insufficient balance to withdraw");
-        _burn(msg.sender, amount);  // Burns WESA equivalent to the amount to be unwrapped
-        payable(msg.sender).transfer(amount);  // Transfers native token back to the user
-        emit Withdrawal(msg.sender, amount);  // Emit event for tracking
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;
+        totalSupply -= amount;
+        payable(msg.sender).transfer(amount);
+    }
+ 
+    function balanceOf(address account) public view returns (uint256) {
+        return balances[account];
+    }
+ 
+    function transfer(address to, uint256 amount) public returns (bool) {
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+        balances[msg.sender] -= amount;
+        balances[to] += amount;
+        return true;
+    }
+ 
+    function approve(address spender, uint256 amount) public returns (bool) {
+        allowances[msg.sender][spender] = amount;
+        return true;
+    }
+ 
+    function allowance(address owner, address spender) public view returns (uint256) {
+        return allowances[owner][spender];
+    }
+ 
+    function transferFrom(address from, address to, uint256 amount) public returns (bool) {
+        require(balances[from] >= amount, "Insufficient balance");
+        require(allowances[from][msg.sender] >= amount, "Allowance exceeded");
+        balances[from] -= amount;
+        allowances[from][msg.sender] -= amount;
+        balances[to] += amount;
+        return true;
     }
 }
+ 
