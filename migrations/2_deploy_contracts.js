@@ -1,4 +1,4 @@
-const MyContract = artifacts.require("HolonToken");
+const MyContract = artifacts.require("WrappedNativeToken");
 
 module.exports = function (deployer) {
     deployer.deploy(MyContract);
