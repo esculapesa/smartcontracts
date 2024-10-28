@@ -1,4 +1,4 @@
-const MyContract = artifacts.require("WrappedNativeToken");
+const MyContract = artifacts.require("WrappedNAT");
 
 module.exports = function (deployer) {
     deployer.deploy(MyContract);
