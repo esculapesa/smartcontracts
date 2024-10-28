@@ -1,68 +1,70 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+contract WrappedNativeToken {
+    string public name = "Wrapped ESA";
+    string public symbol = "WESA";
+    uint8 public decimals = 18;
+    uint256 public totalSupply;
 
-contract WrappedNativeToken is ERC20 {
-    // Event for deposits (minting WESA)
-    event Deposit(address indexed account, uint256 amount);
-    
-    // Event for withdrawals (burning WESA)
-    event Withdrawal(address indexed account, uint256 amount);
+    event Approval(address indexed src, address indexed guy, uint256 wad);
+    event Transfer(address indexed src, address indexed dst, uint256 wad);
+    event Deposit(address indexed dst, uint256 wad);
+    event Withdrawal(address indexed src, uint256 wad);
 
-    constructor() ERC20("Wrapped ESA", "WESA") {}
+    mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance;
 
-    // Fallback function to handle receiving native token and minting WESA
-     receive() external payable {
+    // Fallback function to handle deposits
+    receive() external payable {
         deposit();
     }
 
-    // Deposit native tokens and mint WESA tokens
+    // Deposit native tokens and mint WESA
     function deposit() public payable {
-        require(msg.value > 0, "Must deposit a non-zero amount");
-        _mint(msg.sender, msg.value);  // Mint WESA equivalent to the native token deposited
-        emit Transfer(address(0), msg.sender, msg.value);  // Emit the Transfer event from 0 address (minting)
-        emit Deposit(msg.sender, msg.value);  // Emit custom event for deposit
+        balanceOf[msg.sender] += msg.value;
+        totalSupply += msg.value;
+        emit Deposit(msg.sender, msg.value);
+        emit Transfer(address(0), msg.sender, msg.value);
     }
 
-    // Withdraw native tokens and burn WESA tokens
-    function withdraw(uint256 amount) public {
-        require(balanceOf(msg.sender) >= amount, "Insufficient WESA balance");
-        _burn(msg.sender, amount);  // Burn WESA tokens
-        payable(msg.sender).transfer(amount);  // Send native tokens back to the user
-        emit Transfer(msg.sender, address(0), amount);  // Emit the Transfer event to 0 address (burning)
-        emit Withdrawal(msg.sender, amount);  // Emit custom event for withdrawal
+    // Withdraw native tokens by burning WESA
+    function withdraw(uint256 wad) public {
+        require(balanceOf[msg.sender] >= wad, "Insufficient balance");
+        balanceOf[msg.sender] -= wad;
+        totalSupply -= wad;
+        payable(msg.sender).transfer(wad);
+        emit Withdrawal(msg.sender, wad);
+        emit Transfer(msg.sender, address(0), wad);
     }
 
-    // Check balance of WESA tokens
-    function balanceOf(address account) public view override returns (uint256) {
-        return super.balanceOf(account);
-    }
-
-    // Transfer WESA tokens
-    function transfer(address to, uint256 amount) public override returns (bool) {
-        require(balanceOf(msg.sender) >= amount, "Insufficient WESA balance");
-        _transfer(msg.sender, to, amount);  // Transfer WESA tokens
+    // Approve another address to spend tokens on behalf of the owner
+    function approve(address guy, uint256 wad) public returns (bool) {
+        allowance[msg.sender][guy] = wad;
+        emit Approval(msg.sender, guy, wad);
         return true;
     }
 
-    // Approve an address to spend WESA tokens on behalf of the owner
-    function approve(address spender, uint256 amount) public override returns (bool) {
-        _approve(msg.sender, spender, amount);
+    // Transfer tokens to another address
+    function transfer(address dst, uint256 wad) public returns (bool) {
+        return transferFrom(msg.sender, dst, wad);
+    }
+
+    // Transfer tokens on behalf of another address
+    function transferFrom(address src, address dst, uint256 wad) public returns (bool) {
+        require(balanceOf[src] >= wad, "Insufficient balance");
+        if (src != msg.sender && allowance[src][msg.sender] != type(uint256).max) {
+            require(allowance[src][msg.sender] >= wad, "Allowance exceeded");
+            allowance[src][msg.sender] -= wad;
+        }
+        balanceOf[src] -= wad;
+        balanceOf[dst] += wad;
+        emit Transfer(src, dst, wad);
         return true;
     }
 
-    // Check the amount of WESA tokens an address is allowed to spend on behalf of the owner
-    function allowance(address owner, address spender) public view override returns (uint256) {
-        return super.allowance(owner, spender);
-    }
-
-    // Transfer WESA tokens on behalf of an address, using their allowance
-    function transferFrom(address from, address to, uint256 amount) public override returns (bool) {
-        require(balanceOf(from) >= amount, "Insufficient WESA balance");
-        require(allowance(from, msg.sender) >= amount, "Allowance exceeded");
-        _transfer(from, to, amount);  // Transfer WESA tokens
-        _approve(from, msg.sender, allowance(from, msg.sender) - amount);
-        return true;
+    // Get the total supply of the token
+    function totalSupply() public view returns (uint256) {
+        return address(this).balance;
     }
 }
