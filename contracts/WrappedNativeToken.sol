@@ -1,22 +1,34 @@
-// SPDX-License-Identifier: GPL-3.0
-pragma solidity >=0.7.0 <0.9.0;
-import "@rari-capital/solmate/src/tokens/ERC20.sol";
-contract WrappedNT is ERC20 {
-    event Deposit(address indexed account, uint amount);
-    event Withdraw(address indexed account, uint amount);
-    constructor() ERC20 ("Wrapped ESA", "WESA", 18) {}
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
 
-    fallback() external payable{
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract WrappedNativeToken is ERC20 {
+    constructor() ERC20("Wrapped ESA", "WESA") {}
+
+    // Event when tokens are wrapped
+    event Deposit(address indexed account, uint256 amount);
+    
+    // Event when tokens are unwrapped
+    event Withdrawal(address indexed account, uint256 amount);
+
+    // Allow users to deposit native ESA and mint wrapped tokens
+    receive() external payable {
         deposit();
     }
-    receive() external payable{}
+
+    // Deposit function to wrap native ESA tokens into WESA
     function deposit() public payable {
-        _mint(msg.sender, msg.value);
+        require(msg.value > 0, "Cannot deposit 0");
+        _mint(msg.sender, msg.value);  // 1 ESA = 1 WESA
         emit Deposit(msg.sender, msg.value);
     }
-    function withdraw(uint _amount) external {
-        _burn(msg.sender, _amount);
-        payable(msg.sender).transfer(_amount);
-        emit Withdraw(msg.sender, _amount);
+
+    // Withdraw function to convert WESA back to ESA
+    function withdraw(uint256 amount) public {
+        require(balanceOf(msg.sender) >= amount, "Insufficient balance");
+        _burn(msg.sender, amount);  // Burn WESA tokens
+        payable(msg.sender).transfer(amount);  // Transfer back ESA
+        emit Withdrawal(msg.sender, amount);
     }
 }
