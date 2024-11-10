@@ -13,9 +13,9 @@
 		event Approval(address indexed owner, address indexed spender, uint256 value);
 	}
 
-	contract HetherMEXToken is IERC20 {
-		string public constant name = "Hether MEX";
-		string public constant symbol = "HTM";
+	contract EsculapToken is IERC20 {
+		string public constant name = "Esculap";
+		string public constant symbol = "ESA";
 		uint8 public constant decimals = 18;
 
 		mapping(address => uint256) balances;

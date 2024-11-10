@@ -1,6 +1,8 @@
-const MyContract = artifacts.require("WrappedNativeToken");
+const contracts = ["HolonToken", "INTToken", "InfareToken", "EsculapToken", "EsaCoinToken", "HolopediaToken", "HetherToken", "HetherMEXToken"];
 
-module.exports = function (deployer) {
-    deployer.deploy(MyContract);
+module.exports = async function (deployer) {
+    for (const contractName of contracts) {
+        const Contract = artifacts.require(contractName);
+        await deployer.deploy(Contract);
+    }
 };
-

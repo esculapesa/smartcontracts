@@ -20,7 +20,7 @@
 
 		mapping(address => uint256) balances;
 		mapping(address => mapping(address => uint256)) allowed;
-		uint256 totalSupply_ = 1000000 * 10**uint256(decimals);
+		uint256 totalSupply_ = 210000000 * 10**uint256(decimals);
 
 		constructor() {
 			balances[msg.sender] = totalSupply_;
