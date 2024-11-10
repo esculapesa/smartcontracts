@@ -3,7 +3,7 @@
 
 	import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-	contract EsculapToken is IERC20 {
+	contract EsculapToken is ERC20 {
 		string public constant name = "Esculap";
 		string public constant symbol = "ESA";
 		uint8 public constant decimals = 18;

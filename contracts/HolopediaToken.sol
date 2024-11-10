@@ -3,7 +3,7 @@
 
 	import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-	contract HolopediaToken is IERC20 {
+	contract HolopediaToken is ERC20 {
 		string public constant name = "Holopedia";
 		string public constant symbol = "HPA";
 		uint8 public constant decimals = 18;

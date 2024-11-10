@@ -3,7 +3,7 @@
 
 	import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-	contract INTToken is IERC20 {
+	contract INTToken is ERC20 {
 		string public constant name = "Int";
 		string public constant symbol = "INT";
 		uint8 public constant decimals = 18;

@@ -3,7 +3,7 @@
 
 	import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-	contract HetherMEXToken is IERC20 {
+	contract HetherMEXToken is ERC20 {
 		string public constant name = "Hether MEX";
 		string public constant symbol = "HTM";
 		uint8 public constant decimals = 18;

@@ -3,7 +3,7 @@
 
 	import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-	contract HolonToken is IERC20 {
+	contract HolonToken is ERC20 {
 		string public constant name = "Holon";
 		string public constant symbol = "HNS";
 		uint8 public constant decimals = 18;

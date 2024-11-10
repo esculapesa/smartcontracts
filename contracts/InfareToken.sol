@@ -3,7 +3,7 @@
 
 	import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-	contract InfareToken is IERC20 {
+	contract InfareToken is ERC20 {
 		string public constant name = "Infare";
 		string public constant symbol = "IFE";
 		uint8 public constant decimals = 18;
