@@ -23,7 +23,10 @@ const senderAddress = "0x9636470f2e7093f324a745e6971342c150b4b5a9";  // Provided
 const recipientAddress = "0xdbb9a7b465a515642050a5788d6d5575e7732c07";  // Provided recipient address
 const privateKey = process.env.PRIVATE_KEY;  // Sender's private key from environment variable
 
-// List of token contract addresses and the amount to transfer for each (70% of 210 million)
+// Toggle test mode for debugging
+const testMode = true;  // Set to true to transfer fewer tokens for testing
+
+// Full list of tokens with the 147 million transfer amount
 const tokens = [
     { address: "0xcDbBC3fC0466f35D102441E2216A5888A54Cb372", amount: web3.utils.toWei("147000000", "ether") },  // EsaCoin (ESC)
     { address: "0xaa9cFb915654772e971D540292152F20cd25B46b", amount: web3.utils.toWei("147000000", "ether") },  // Esculap (ESA)
@@ -35,9 +38,13 @@ const tokens = [
     { address: "0x664BEb8E762B19346d34C8A4c02705662371d5d1", amount: web3.utils.toWei("147000000", "ether") }   // Int (INT)
 ];
 
+// Use only a subset of tokens for testing if testMode is enabled
+const testTokens = tokens.slice(0, 2);  // Use the first two tokens for testing
+const activeTokens = testMode ? testTokens : tokens;
+
 // Prepare data for the bulkTransfer function
-const tokenAddresses = tokens.map(token => token.address);
-const amounts = tokens.map(token => token.amount);
+const tokenAddresses = activeTokens.map(token => token.address);
+const amounts = activeTokens.map(token => token.amount);
 
 async function callBulkTransfer() {
     try {
@@ -50,7 +57,7 @@ async function callBulkTransfer() {
             from: senderAddress,
             to: bulkTransferAddress,
             data,
-            gas,
+            gas: 500000,  // Increased gas limit for complex transaction
             gasPrice: web3.utils.toWei('5', 'gwei')
         };
 

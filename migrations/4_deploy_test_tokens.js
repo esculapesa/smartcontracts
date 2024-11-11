@@ -5,7 +5,7 @@ const tokens = [
     { name: "testSecondToken", symbol: "TT2", initialSupply: "210000000" }
 ];
 
-module.exports = async function (deployer) {
+module.exports = async function(deployer) {
     for (const token of tokens) {
         await deployer.deploy(EsaCoinToken, token.name, token.symbol, web3.utils.toWei(token.initialSupply, "ether"));
         const deployedToken = await EsaCoinToken.deployed();
