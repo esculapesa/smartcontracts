@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-interface IERC20 {
-    function transfer(address recipient, uint256 amount) external returns (bool);
-}
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract BulkTransfer {
     function bulkTransfer(address[] calldata tokenContracts, address recipient, uint256[] calldata amounts) external {

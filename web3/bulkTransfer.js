@@ -21,7 +21,7 @@ const bulkTransferContract = new web3.eth.Contract(bulkTransferAbi, bulkTransfer
 
 const senderAddress = "0x9636470f2e7093f324a745e6971342c150b4b5a9";  // Provided sender address
 const recipientAddress = "0xdbb9a7b465a515642050a5788d6d5575e7732c07";  // Provided recipient address
-const privateKey = process.env.PRIVATE_KEY;  // Sender's private key from environment variable
+const privateKey = process.env.copperkey;  // Sender's private key from environment variable
 
 // Toggle test mode for debugging
 const testMode = true;  // Set to true to transfer fewer tokens for testing
@@ -38,8 +38,13 @@ const tokens = [
     { address: "0x664BEb8E762B19346d34C8A4c02705662371d5d1", amount: web3.utils.toWei("147000000", "ether") }   // Int (INT)
 ];
 
+// Full list of tokens with the 147 million transfer amount
+const testTokens = [
+    { address: "0x3f65642A1621466E0B467692839D87237435794C", amount: web3.utils.toWei("147000000", "ether") },  // Infare (IFE)
+    { address: "0x664BEb8E762B19346d34C8A4c02705662371d5d1", amount: web3.utils.toWei("147000000", "ether") }   // Int (INT)
+];
+
 // Use only a subset of tokens for testing if testMode is enabled
-const testTokens = tokens.slice(0, 2);  // Use the first two tokens for testing
 const activeTokens = testMode ? testTokens : tokens;
 
 // Prepare data for the bulkTransfer function

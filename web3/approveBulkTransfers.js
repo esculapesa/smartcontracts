@@ -20,7 +20,7 @@ const tokenAbi = [
 
 const bulkTransferAddress = "0x9aE2a4e34634dD4cab33574279cC27D301aE0794";  // Address of the BulkTransfer contract
 const senderAddress = "0x9636470f2e7093f324a745e6971342c150b4b5a9";  // Sender's address
-const privateKey = process.env.PRIVATE_KEY;  // Private key from environment variable
+const privateKey = process.env.copperkey;  // Private key from environment variable
 
 // List of token contract addresses and the approval amount (148 million in wei)
 const tokens = [
