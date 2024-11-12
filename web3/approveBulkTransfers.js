@@ -22,6 +22,8 @@ const bulkTransferAddress = "0x9aE2a4e34634dD4cab33574279cC27D301aE0794";  // Ad
 const senderAddress = "0x9636470f2e7093f324a745e6971342c150b4b5a9";  // Sender's address
 const privateKey = process.env.copperkey;  // Private key from environment variable
 
+const testMode = true;  // Set to true to transfer fewer tokens for testing
+
 // List of token contract addresses and the approval amount (148 million in wei)
 const tokens = [
     { address: "0xcDbBC3fC0466f35D102441E2216A5888A54Cb372", amount: web3.utils.toWei("148000000", "ether") },  // EsaCoin (ESC)
@@ -34,8 +36,17 @@ const tokens = [
     { address: "0x664BEb8E762B19346d34C8A4c02705662371d5d1", amount: web3.utils.toWei("148000000", "ether") }   // Int (INT)
 ];
 
+// Full list of tokens with the 147 million transfer amount
+const testTokens = [
+    { address: "0x6353d130520CC2b803F224Ad515A40Fa59e968F3", amount: web3.utils.toWei("147000000", "ether") },  // Infare (IFE)
+    { address: "0x6353d130520CC2b803F224Ad515A40Fa59e968F3", amount: web3.utils.toWei("147000000", "ether") }   // Int (INT)
+];
+
+// Use only a subset of tokens for testing if testMode is enabled
+const activeTokens = testMode ? testTokens : tokens;
+
 async function approveTokens() {
-    for (const token of tokens) {
+    for (const token of activeTokens) {
         try {
             const tokenContract = new web3.eth.Contract(tokenAbi, token.address);
 
