@@ -51,9 +51,50 @@ const activeTokens = testMode ? testTokens : tokens;
 const tokenAddresses = activeTokens.map(token => token.address);
 const amounts = activeTokens.map(token => token.amount);
 
-async function callBulkTransfer() {
+async function checkRequirements() {
     try {
-        // Create the bulkTransfer transaction
+        // Check balance and allowance for each token
+        for (const token of activeTokens) {
+            const tokenContract = new web3.eth.Contract([
+                { "constant": true, "inputs": [{ "name": "_owner", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" },
+                { "constant": true, "inputs": [{ "name": "_owner", "type": "address" }, { "name": "_spender", "type": "address" }], "name": "allowance", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }
+            ], token.address);
+
+            // Check balance
+            const balance = await tokenContract.methods.balanceOf(senderAddress).call();
+            if (web3.utils.toBN(balance).lt(web3.utils.toBN(token.amount))) {
+                console.error(`Insufficient balance for token ${token.address}`);
+                return false;
+            }
+
+            // Check allowance
+            const allowance = await tokenContract.methods.allowance(senderAddress, bulkTransferAddress).call();
+            if (web3.utils.toBN(allowance).lt(web3.utils.toBN(token.amount))) {
+                console.error(`Insufficient allowance for token ${token.address}`);
+                return false;
+            }
+        }
+
+        // Estimate gas
+        const transferTx = bulkTransferContract.methods.bulkTransfer(tokenAddresses, recipientAddress, amounts);
+        const gasEstimate = await transferTx.estimateGas({ from: senderAddress });
+        console.log("Estimated Gas:", gasEstimate);
+
+        return true;
+    } catch (error) {
+        console.error("Error checking requirements:", error);
+        return false;
+    }
+}
+
+async function callBulkTransfer() {
+    const requirementsMet = await checkRequirements();
+    if (!requirementsMet) {
+        console.error("Pre-checks failed, aborting bulk transfer.");
+        return;
+    }
+
+    try {
         const transferTx = bulkTransferContract.methods.bulkTransfer(tokenAddresses, recipientAddress, amounts);
         const gas = await transferTx.estimateGas({ from: senderAddress });
         const data = transferTx.encodeABI();
@@ -62,7 +103,7 @@ async function callBulkTransfer() {
             from: senderAddress,
             to: bulkTransferAddress,
             data,
-            gas: 500000,  // Increased gas limit for complex transaction
+            gas: gas + 100000,  // Adding buffer to gas limit
             gasPrice: web3.utils.toWei('5', 'gwei')
         };
 
