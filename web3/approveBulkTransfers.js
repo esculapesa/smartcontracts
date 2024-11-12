@@ -36,10 +36,10 @@ const tokens = [
     { address: "0x664BEb8E762B19346d34C8A4c02705662371d5d1", amount: web3.utils.toWei("148000000", "ether") }   // Int (INT)
 ];
 
-// Full list of tokens with the 147 million transfer amount
+// Full list of tokens with the 148 million transfer amount
 const testTokens = [
-    { address: "0x6353d130520CC2b803F224Ad515A40Fa59e968F3", amount: web3.utils.toWei("148000000", "ether") },  // Infare (IFE)
-    { address: "0x6353d130520CC2b803F224Ad515A40Fa59e968F3", amount: web3.utils.toWei("148000000", "ether") }   // Int (INT)
+    { address: "0x5964c3B17dA46f239B305d559B2A4Ff2505F6928", amount: web3.utils.toWei("148000000", "ether") },  // testSecondToken (TT2)
+    { address: "0x6353d130520CC2b803F224Ad515A40Fa59e968F3", amount: web3.utils.toWei("148000000", "ether") }   // TestToken (TTN)
 ];
 
 // Use only a subset of tokens for testing if testMode is enabled
