@@ -81,7 +81,9 @@ async function checkRequirements() {
         }
 
         try {
+            console.log("trying bulk transfer");
             const transferTx = bulkTransferContract.methods.bulkTransfer(tokenAddresses, recipientAddress, amounts);
+            console.log("transferTx received: ", transferTx);
             const gasEstimate = await transferTx.estimateGas({ from: senderAddress });
             console.log("Estimated Gas:", gasEstimate);
         } catch (gasError) {
