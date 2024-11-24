@@ -1,8 +1,6 @@
 // This script will deploy the Nonfungible Position Manager contract using Truffle
 
 const path = require('path');
-const NonfungiblePositionManagerArtifact = require('@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json');
-
 const NonfungiblePositionManager = artifacts.require(
   path.resolve(__dirname, '../node_modules/@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json')
 );
