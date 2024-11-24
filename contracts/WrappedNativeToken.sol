@@ -2,8 +2,9 @@
 pragma solidity ^0.8.20;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract WrappedNativeToken is ERC20 {
+contract WrappedNativeToken is ERC20, ReentrancyGuard {
     constructor() ERC20("Wrapped ESA", "WESA") {}
 
     // Event when tokens are wrapped
@@ -25,10 +26,13 @@ contract WrappedNativeToken is ERC20 {
     }
 
     // Withdraw function to convert WESA back to ESA
-    function withdraw(uint256 amount) public {
+    function withdraw(uint256 amount) public nonReentrant {
         require(balanceOf(msg.sender) >= amount, "Insufficient balance");
         _burn(msg.sender, amount);  // Burn WESA tokens
-        payable(msg.sender).transfer(amount);  // Transfer back ESA
+
+        (bool success, ) = msg.sender.call{value: amount}("");
+        require(success, "Transfer failed");  // Transfer back ESA
+
         emit Withdrawal(msg.sender, amount);
     }
 }
