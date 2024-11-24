@@ -1,3 +1,5 @@
+require('dotenv').config();
+const { ethers } = require('ethers');
 const { abi: FACTORY_ABI } = require('@uniswap/v3-core/artifacts/contracts/UniswapV3Factory.sol/UniswapV3Factory.json');
 
 async function getPoolFromFactory() {
